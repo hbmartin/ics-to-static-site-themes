@@ -158,4 +158,4 @@ tests/
 
 ## License
 
-See [LICENSE](LICENSE) for details.
+See [LICENSE.txt](LICENSE.txt) for details.
