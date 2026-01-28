@@ -78,10 +78,10 @@ def test_generate_html_title(minimal_config, sample_events):
 
 def test_generate_html_meta_tags(minimal_config, sample_events):
     html = generate_html(minimal_config, sample_events)
-    assert 'og:title' in html
-    assert 'og:description' in html
-    assert 'twitter:card' in html
-    assert '@testuser' in html
+    assert "og:title" in html
+    assert "og:description" in html
+    assert "twitter:card" in html
+    assert "@testuser" in html
 
 
 def test_generate_html_inline_css(minimal_config, sample_events):
@@ -131,15 +131,15 @@ def test_generate_html_categories(minimal_config, sample_events):
 def test_generate_html_accessibility(minimal_config, sample_events):
     html = generate_html(minimal_config, sample_events)
     assert 'class="skip-link"' in html
-    assert 'aria-label' in html
-    assert 'aria-pressed' in html
-    assert 'aria-checked' in html
+    assert "aria-label" in html
+    assert "aria-pressed" in html
+    assert "aria-checked" in html
 
 
 def test_generate_html_jsonld(minimal_config, sample_events):
     html = generate_html(minimal_config, sample_events)
-    assert 'application/ld+json' in html
-    assert 'schema.org' in html
+    assert "application/ld+json" in html
+    assert "schema.org" in html
 
 
 def test_generate_html_theme_buttons(minimal_config, sample_events):
@@ -177,6 +177,7 @@ def test_full_pipeline(sample_config_path):
     filters = FiltersConfig(start_date=date(2026, 1, 1), end_date=date(2026, 12, 31))
     ics_path = config.calendar
     from pathlib import Path
+
     ics_content = Path(ics_path).read_text(encoding="utf-8")
     events = parse_events(ics_content, filters)
     html = generate_html(config, events)

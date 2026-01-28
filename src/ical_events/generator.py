@@ -71,7 +71,7 @@ def _month_label(month_key: str) -> str:
         year, month = month_key.split("-")
         d = date(int(year), int(month), 1)
         return d.strftime("%B %Y")
-    except (ValueError, IndexError):
+    except ValueError, IndexError:
         return month_key
 
 
@@ -86,12 +86,20 @@ def generate_html(config: Config, events: list[TemplateEvent]) -> str:
         # Load CSS and JS as raw strings
         templates_dir = Path(__file__).parent / "templates"
         css_parts = []
-        for css_file in ["styles/base.css", "styles/themes.css", "styles/components.css"]:
+        for css_file in [
+            "styles/base.css",
+            "styles/themes.css",
+            "styles/components.css",
+        ]:
             css_parts.append(_load_template_file(templates_dir, css_file))
         inline_css = "\n".join(css_parts)
 
         js_parts = []
-        for js_file in ["scripts/theme.js", "scripts/favorites.js", "scripts/filter.js"]:
+        for js_file in [
+            "scripts/theme.js",
+            "scripts/favorites.js",
+            "scripts/filter.js",
+        ]:
             js_parts.append(_load_template_file(templates_dir, js_file))
         inline_js = "\n".join(js_parts)
 

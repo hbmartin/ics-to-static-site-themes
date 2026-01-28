@@ -123,7 +123,10 @@ def parse_events(ics_content: str, filters: FiltersConfig) -> list[TemplateEvent
             categories=categories,
             month_key=event_start_date.strftime("%Y-%m"),
             anchor_id=_make_anchor_id(uid),
-            date_display=_format_date_display(event_start_date, event_end_date if event_end_date != event_start_date else None),
+            date_display=_format_date_display(
+                event_start_date,
+                event_end_date if event_end_date != event_start_date else None,
+            ),
             duration_days=duration,
         )
         events.append(te)

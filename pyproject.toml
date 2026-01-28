@@ -17,6 +17,7 @@ ical-events = "ical_events.cli:main"
 
 [dependency-groups]
 dev = [
+    "black>=26.1.0",
     "pytest>=8.0",
 ]
 

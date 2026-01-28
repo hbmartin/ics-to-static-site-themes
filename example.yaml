@@ -1,0 +1,13 @@
+calendar: https://calendar.google.com/calendar/ical/a14635d9533bf66effeaa4d6441484edbf1dbacef1eff56b78c73572f9328882%40group.calendar.google.com/public/basic.ics
+
+site:
+  title: "LA Tech Events 2026"
+  description: "A curated list of technology conferences and events in the Los Angeles area and beyond"
+  homepage_url: "https://laevents.tech"
+
+meta:
+  custom:
+    author: "LA Tech Events"
+
+output:
+  file: "./events/index.html"

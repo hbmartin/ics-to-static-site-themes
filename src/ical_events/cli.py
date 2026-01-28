@@ -42,7 +42,9 @@ def main(argv: list[str] | None = None) -> None:
     events = parse_events(ics_content, config.filters)
 
     if not events:
-        print("Warning: No events found matching the configured filters.", file=sys.stderr)
+        print(
+            "Warning: No events found matching the configured filters.", file=sys.stderr
+        )
 
     # Generate HTML
     html = generate_html(config, events)
