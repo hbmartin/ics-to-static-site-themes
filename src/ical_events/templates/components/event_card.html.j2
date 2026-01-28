@@ -1,0 +1,52 @@
+<article class="event-card"
+         id="event-{{ event.anchor_id }}"
+         data-uid="{{ event.uid }}"
+         data-month="{{ event.month_key }}"
+         aria-label="{{ event.summary }}">
+  <div class="date-block">
+    <div class="date-month">{{ event.start_date.strftime('%b') }}</div>
+    <div class="date-day">{{ event.start_date.day }}</div>
+    <div class="date-year">{{ event.start_date.strftime('%Y') }}</div>
+  </div>
+  <div class="event-details">
+    <h3 class="event-title">
+      {%- if event.url %}
+      <a href="{{ event.url }}" target="_blank" rel="noopener noreferrer">{{ event.summary }}</a>
+      {%- else %}
+      {{ event.summary }}
+      {%- endif %}
+    </h3>
+    <div class="event-meta">
+      <span>{{ event.date_display }}</span>
+      {%- if event.duration_days > 1 %}
+      <span>{{ event.duration_days }} days</span>
+      {%- endif %}
+      {%- if event.location %}
+      <span>{{ event.location }}</span>
+      {%- endif %}
+    </div>
+    {%- if event.description %}
+    <p class="event-description">{{ event.description }}</p>
+    {%- endif %}
+    {%- if event.categories %}
+    <div class="event-categories">
+      {%- for cat in event.categories %}
+      <span class="category-tag">{{ cat }}</span>
+      {%- endfor %}
+    </div>
+    {%- endif %}
+  </div>
+  <div class="event-actions">
+    <button type="button"
+            class="action-btn copy-btn"
+            data-anchor="{{ event.anchor_id }}"
+            aria-label="Copy link to this event"
+            title="Copy link">&#128279;<span class="copy-feedback">Copied!</span></button>
+    <button type="button"
+            class="action-btn favorite-btn"
+            data-uid="{{ event.uid }}"
+            aria-pressed="false"
+            aria-label="Add to favorites"
+            title="Favorite">&#9825;</button>
+  </div>
+</article>

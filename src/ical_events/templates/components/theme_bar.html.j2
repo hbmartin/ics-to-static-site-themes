@@ -1,0 +1,25 @@
+<nav class="theme-bar" aria-label="Theme selection">
+  <span class="theme-label">Theme:</span>
+  <div class="theme-options" role="radiogroup" aria-label="Select visual theme">
+    {%- set themes = [
+      ("win95", "Win 95"),
+      ("system7", "System 7"),
+      ("y2k", "Y2K"),
+      ("phosphor", "CRT"),
+      ("redhat", "ncurses"),
+      ("mr-robot", "Mr. Robot"),
+      ("tron", "Tron")
+    ] -%}
+    {%- for value, label in themes %}
+    <button type="button"
+            class="theme-btn"
+            role="radio"
+            aria-checked="false"
+            data-theme-value="{{ value }}"
+            tabindex="0">{{ label }}</button>
+    {%- endfor %}
+  </div>
+  {%- if config.site.homepage_url %}
+  <a href="{{ config.site.homepage_url }}" class="homepage-link">&larr; Back to site</a>
+  {%- endif %}
+</nav>

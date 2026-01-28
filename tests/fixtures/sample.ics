@@ -1,0 +1,56 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Test Events//Claude//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+
+BEGIN:VEVENT
+UID:test-allday-1@test
+DTSTART;VALUE=DATE:20260301
+DTEND;VALUE=DATE:20260302
+SUMMARY:All-Day Event
+DESCRIPTION:A simple all-day event for testing.
+LOCATION:Test City, CA
+CATEGORIES:Testing,Events
+END:VEVENT
+
+BEGIN:VEVENT
+UID:test-multiday-2@test
+DTSTART;VALUE=DATE:20260310
+DTEND;VALUE=DATE:20260313
+SUMMARY:Multi-Day Conference
+DESCRIPTION:A three-day conference spanning March 10-12.
+LOCATION:Convention Center, Los Angeles, CA
+URL:https://example.com/conference
+CATEGORIES:Conference,Tech
+END:VEVENT
+
+BEGIN:VEVENT
+UID:test-nourl-3@test
+DTSTART;VALUE=DATE:20260315
+DTEND;VALUE=DATE:20260316
+SUMMARY:Event Without URL
+DESCRIPTION:This event has no URL.
+LOCATION:Somewhere, CA
+END:VEVENT
+
+BEGIN:VEVENT
+UID:test-april-4@test
+DTSTART;VALUE=DATE:20260401
+DTEND;VALUE=DATE:20260402
+SUMMARY:April Event
+DESCRIPTION:An event in April to test month grouping.
+LOCATION:April City, CA
+CATEGORIES:Spring
+END:VEVENT
+
+BEGIN:VEVENT
+UID:test-past-5@test
+DTSTART;VALUE=DATE:20240101
+DTEND;VALUE=DATE:20240102
+SUMMARY:Past Event
+DESCRIPTION:This event is in the past and should be filtered out.
+LOCATION:Old Town, CA
+END:VEVENT
+
+END:VCALENDAR

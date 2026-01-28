@@ -1,0 +1,25 @@
+calendar: tests/fixtures/sample.ics
+
+site:
+  title: "Test Events"
+  description: "A test event listing"
+  homepage_url: "https://example.com"
+  x_username: "testuser"
+
+filters:
+  start_date: "2026-01-01"
+  end_date: "2026-12-31"
+
+meta:
+  image: "https://example.com/og-image.png"
+  custom:
+    author: "Test Author"
+
+structured_data:
+  organization:
+    name: "Test Org"
+    url: "https://example.com"
+    logo: "https://example.com/logo.png"
+
+output:
+  file: "./test-output/index.html"

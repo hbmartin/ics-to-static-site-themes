@@ -1,0 +1,29 @@
+[project]
+name = "ics-to-static-site-themes"
+version = "0.1.0"
+description = "Generate static HTML event listings from ICS calendars with retro CSS themes"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "ical>=12.1.2",
+    "jinja2>=3.1.6",
+    "python-dateutil>=2.9.0.post0",
+    "pyyaml>=6.0.3",
+    "requests>=2.32.5",
+]
+
+[project.scripts]
+ical-events = "ical_events.cli:main"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+]
+
+[build-system]
+requires = ["uv_build>=0.9.27,<0.10"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-root = "src"
+module-name = "ical_events"

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ config.site.title }}</title>
+  <meta name="description" content="{{ config.site.description }}">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="{{ config.site.title }}">
+  <meta property="og:description" content="{{ config.site.description }}">
+  <meta property="og:type" content="website">
+  {%- if config.site.homepage_url %}
+  <meta property="og:url" content="{{ config.site.homepage_url }}">
+  {%- endif %}
+  {%- if config.meta.image %}
+  <meta property="og:image" content="{{ config.meta.image }}">
+  {%- endif %}
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="{{ 'summary_large_image' if config.meta.image else 'summary' }}">
+  <meta name="twitter:title" content="{{ config.site.title }}">
+  <meta name="twitter:description" content="{{ config.site.description }}">
+  {%- if config.meta.image %}
+  <meta name="twitter:image" content="{{ config.meta.image }}">
+  {%- endif %}
+  {%- if config.site.x_username %}
+  <meta name="twitter:site" content="@{{ config.site.x_username }}">
+  {%- endif %}
+
+  <!-- Custom Meta Tags -->
+  {%- for key, value in config.meta.custom.items() %}
+  <meta name="{{ key }}" content="{{ value }}">
+  {%- endfor %}
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+{{ jsonld | safe }}
+  </script>
+
+  <style>
+{{ inline_css | safe }}
+  </style>
+</head>
+<body data-theme="win95">
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <div class="container">
+    {% include 'components/theme_bar.html.j2' %}
+
+    <header>
+      <h1>{{ config.site.title }}</h1>
+      {%- if config.site.description %}
+      <p class="site-description">{{ config.site.description }}</p>
+      {%- endif %}
+    </header>
+
+    {% include 'components/filter_bar.html.j2' %}
+
+    <main id="main-content">
+      {%- for month_key, month_events in grouped_events %}
+      {% include 'components/month_separator.html.j2' %}
+      {%- for event in month_events %}
+      {% include 'components/event_card.html.j2' %}
+      {%- endfor %}
+      {%- endfor %}
+
+      <div class="empty-state hidden" aria-live="polite"></div>
+    </main>
+  </div>
+
+  <script>
+{{ inline_js | safe }}
+  </script>
+</body>
+</html>
