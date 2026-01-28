@@ -3,6 +3,18 @@ name = "ics-to-static-site-themes"
 version = "0.1.0"
 description = "Generate static HTML event listings from ICS calendars with retro CSS themes"
 readme = "README.md"
+keywords = [
+    "ics",
+    "ical",
+    "icalendar",
+    "calendar",
+    "events",
+    "static-site",
+    "html",
+    "css",
+    "themes",
+    "retro",
+]
 requires-python = ">=3.14"
 dependencies = [
     "ical>=12.1.2",

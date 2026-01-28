@@ -45,12 +45,17 @@ class OutputConfig(BaseModel):
 
 
 class Config(BaseModel):
+    model_config = {"populate_by_name": True}
+
     calendar: str
     site: SiteConfig
     filters: FiltersConfig = Field(default_factory=FiltersConfig)
     meta: MetaConfig = Field(default_factory=MetaConfig)
     structured_data: StructuredDataConfig = Field(default_factory=StructuredDataConfig)
     output: OutputConfig = Field(default_factory=OutputConfig)
+    wrangler_pages_project: str | None = Field(
+        default=None, alias="wrangler-pages-project"
+    )
 
 
 class TemplateEvent(BaseModel):

@@ -11,3 +11,6 @@ meta:
 
 output:
   file: "./events/index.html"
+
+# Optional: Deploy to Cloudflare Pages after generation
+# wrangler-pages-project: "my-project-name"

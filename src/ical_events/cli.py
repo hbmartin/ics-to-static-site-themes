@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import argparse
+import subprocess
 import sys
+from pathlib import Path
 
 from . import __version__
 from .calendar import fetch_calendar_data, parse_events
@@ -53,3 +55,19 @@ def main(argv: list[str] | None = None) -> None:
     output_path = config.output.file
     write_output(html, output_path)
     print(f"Generated {len(events)} events → {output_path}")
+
+    # Deploy to Cloudflare Pages if configured
+    if config.wrangler_pages_project:
+        output_dir = str(Path(output_path).parent)
+        cmd = [
+            "wrangler",
+            "pages",
+            "deploy",
+            output_dir,
+            f"--project-name={config.wrangler_pages_project}",
+        ]
+        print(f"Deploying to Cloudflare Pages project: {config.wrangler_pages_project}")
+        result = subprocess.run(cmd)
+        if result.returncode != 0:
+            print("Error: wrangler pages deploy failed", file=sys.stderr)
+            sys.exit(5)
