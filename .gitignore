@@ -13,3 +13,5 @@ example.ics
 events/
 sample_config.yaml
 
+.coverage
+htmlcov/

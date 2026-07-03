@@ -3,6 +3,8 @@ name = "ics-to-static-site-themes"
 version = "0.1.0"
 description = "Generate static HTML event listings from ICS calendars with retro CSS themes"
 readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE.txt"]
 keywords = [
     "ics",
     "ical",
@@ -15,14 +17,30 @@ keywords = [
     "themes",
     "retro",
 ]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Internet :: WWW/HTTP :: Site Management",
+    "Topic :: Text Processing :: Markup :: HTML",
+]
 requires-python = ">=3.14"
 dependencies = [
     "ical>=12.1.2",
     "jinja2>=3.1.6",
+    "markupsafe>=2.1",
+    "pydantic>=2.0",
     "python-dateutil>=2.9.0.post0",
     "pyyaml>=6.0.3",
     "requests>=2.32.5",
 ]
+
+[project.urls]
+Repository = "https://github.com/hbmartin/ics-to-static-site-themes"
+Issues = "https://github.com/hbmartin/ics-to-static-site-themes/issues"
 
 [project.scripts]
 ical-events = "ical_events.cli:main"
@@ -31,6 +49,9 @@ ical-events = "ical_events.cli:main"
 dev = [
     "black>=26.1.0",
     "pytest>=8.0",
+    "pytest-cov>=6.0",
+    "ruff>=0.9",
+    "ty>=0.0.1a14",
 ]
 
 [build-system]
@@ -40,3 +61,40 @@ build-backend = "uv_build"
 [tool.uv.build-backend]
 module-root = "src"
 module-name = "ical_events"
+
+[tool.black]
+# py313 keeps black from rewriting code into 3.14-only syntax (e.g. PEP 758
+# unparenthesized except tuples), so the source stays parseable by older tools
+target-version = ["py313"]
+
+[tool.ruff]
+target-version = "py314"
+line-length = 88
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "UP",  # pyupgrade
+    "SIM", # flake8-simplify
+    "C4",  # flake8-comprehensions
+]
+ignore = [
+    "E501", # line length is handled by black
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--cov=ical_events --cov-report=term-missing --cov-fail-under=85"
+
+[tool.coverage.run]
+source = ["src/ical_events"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "if TYPE_CHECKING:",
+]

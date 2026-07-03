@@ -1,0 +1,60 @@
+# Example workflow: regenerate the event listing on a schedule and publish
+# it to GitHub Pages.
+#
+# To use it in your own repository:
+#   1. Copy this file to .github/workflows/deploy-github-pages.yml
+#   2. Commit a config.yaml pointing at your ICS calendar (a URL works best
+#      for scheduled rebuilds)
+#   3. In the repository settings, set Pages "Source" to "GitHub Actions"
+
+name: Deploy to GitHub Pages
+
+on:
+  # Rebuild every day at 06:00 UTC so newly published events appear
+  schedule:
+    - cron: "0 6 * * *"
+  # Rebuild on pushes to main (e.g. config changes)
+  push:
+    branches: [main]
+  # Allow manual rebuilds from the Actions tab
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Set up Python 3.14
+        run: uv python install 3.14
+
+      - name: Generate the site
+        run: uvx --from ics-to-static-site-themes ical-events config.yaml -o site/index.html
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site/
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
