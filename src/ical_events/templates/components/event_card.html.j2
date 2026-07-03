@@ -1,7 +1,8 @@
 <article class="event-card"
          id="event-{{ event.anchor_id }}"
-         data-uid="{{ event.uid }}"
+         data-uid="{{ event.instance_id }}"
          data-month="{{ event.month_key }}"
+         data-categories="{{ event.categories | join('||') | lower }}"
          aria-label="{{ event.summary }}">
   <div class="date-block">
     <div class="date-month">{{ event.start_date.strftime('%b') }}</div>
@@ -18,15 +19,21 @@
     </h3>
     <div class="event-meta">
       <span>{{ event.date_display }}</span>
+      {%- if event.time_display %}
+      <span>{{ event.time_display }}</span>
+      {%- endif %}
       {%- if event.duration_days > 1 %}
       <span>{{ event.duration_days }} days</span>
       {%- endif %}
       {%- if event.location %}
       <span>{{ event.location }}</span>
       {%- endif %}
+      {%- if event.source_label %}
+      <span class="source-badge"{% if event.source_color %} style="--source-color: {{ event.source_color }}"{% endif %}>{{ event.source_label }}</span>
+      {%- endif %}
     </div>
     {%- if event.description %}
-    <p class="event-description">{{ event.description }}</p>
+    <p class="event-description">{{ event.description | render_description }}</p>
     {%- endif %}
     {%- if event.categories %}
     <div class="event-categories">
@@ -35,6 +42,17 @@
       {%- endfor %}
     </div>
     {%- endif %}
+    <div class="add-to-calendar">
+      <a class="calendar-link"
+         href="{{ event | gcal_url }}"
+         target="_blank"
+         rel="noopener noreferrer"
+         aria-label="Add {{ event.summary }} to Google Calendar">+ Google Calendar</a>
+      <a class="calendar-link"
+         href="{{ event | ics_data_uri }}"
+         download="{{ event.anchor_id }}.ics"
+         aria-label="Download {{ event.summary }} as an iCal file">&darr; .ics</a>
+    </div>
   </div>
   <div class="event-actions">
     <button type="button"
@@ -44,7 +62,7 @@
             title="Copy link">&#128279;<span class="copy-feedback">Copied!</span></button>
     <button type="button"
             class="action-btn favorite-btn"
-            data-uid="{{ event.uid }}"
+            data-uid="{{ event.instance_id }}"
             aria-pressed="false"
             aria-label="Add to favorites"
             title="Favorite">&#9825;</button>

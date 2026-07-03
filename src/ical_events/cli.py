@@ -8,12 +8,14 @@ import sys
 from pathlib import Path
 
 from . import __version__
-from .calendar import fetch_calendar_data, parse_events
+from .calendar import collect_events, resolve_today
 from .config import load_config
+from .exceptions import DeployError, IcalEventsError
 from .generator import generate_html, write_output
 
 
-def main(argv: list[str] | None = None) -> None:
+def run(argv: list[str] | None = None) -> None:
+    """Parse arguments and generate the site. Raises IcalEventsError on failure."""
     parser = argparse.ArgumentParser(
         prog="ical-events",
         description="Generate a static HTML event listing from an ICS calendar",
@@ -25,12 +27,19 @@ def main(argv: list[str] | None = None) -> None:
         help="Override output file path",
     )
     parser.add_argument(
+        "--today",
+        help="Override the current date (YYYY-MM-DD) for reproducible builds; "
+        "SOURCE_DATE_EPOCH is also honored",
+    )
+    parser.add_argument(
         "--version",
         action="version",
         version=f"%(prog)s {__version__}",
     )
 
     args = parser.parse_args(argv)
+
+    today = resolve_today(args.today)
 
     # Load config
     config = load_config(args.config)
@@ -39,9 +48,8 @@ def main(argv: list[str] | None = None) -> None:
     if args.output:
         config.output.file = args.output
 
-    # Fetch and parse calendar
-    ics_content = fetch_calendar_data(config.calendar)
-    events = parse_events(ics_content, config.filters)
+    # Fetch and parse all calendar sources
+    events = collect_events(config, today)
 
     if not events:
         print(
@@ -69,5 +77,12 @@ def main(argv: list[str] | None = None) -> None:
         print(f"Deploying to Cloudflare Pages project: {config.wrangler_pages_project}")
         result = subprocess.run(cmd)
         if result.returncode != 0:
-            print("Error: wrangler pages deploy failed", file=sys.stderr)
-            sys.exit(5)
+            raise DeployError("wrangler pages deploy failed")
+
+
+def main(argv: list[str] | None = None) -> None:
+    try:
+        run(argv)
+    except IcalEventsError as e:
+        print(f"Error: {e}", file=sys.stderr)
+        sys.exit(e.exit_code)

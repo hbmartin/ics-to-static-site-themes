@@ -39,7 +39,7 @@
   function updateFavoriteButton(btn, favorited) {
     btn.setAttribute('aria-pressed', favorited ? 'true' : 'false');
     btn.setAttribute('aria-label', favorited ? 'Remove from favorites' : 'Add to favorites');
-    btn.textContent = favorited ? '\u2665' : '\u2661';
+    btn.textContent = favorited ? '♥' : '♡';
   }
 
   function initFavorites() {
@@ -63,6 +63,77 @@
             window.__updateFilter();
           }
         }
+      }
+    });
+  }
+
+  function getEventExportData() {
+    var el = document.getElementById('event-export-data');
+    if (!el) {
+      return [];
+    }
+    try {
+      return JSON.parse(el.textContent);
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function extractVevent(ics) {
+    var start = ics.indexOf('BEGIN:VEVENT');
+    var end = ics.indexOf('END:VEVENT');
+    if (start < 0 || end < 0) {
+      return '';
+    }
+    return ics.substring(start, end + 'END:VEVENT'.length);
+  }
+
+  function buildFavoritesIcs() {
+    var favs = getFavorites();
+    var vevents = [];
+    getEventExportData().forEach(function(entry) {
+      if (favs.indexOf(entry.id) >= 0) {
+        var vevent = extractVevent(entry.ics);
+        if (vevent) {
+          vevents.push(vevent);
+        }
+      }
+    });
+    if (vevents.length === 0) {
+      return null;
+    }
+    return 'BEGIN:VCALENDAR\r\n' +
+      'VERSION:2.0\r\n' +
+      'PRODID:-//ical-events//favorites//EN\r\n' +
+      vevents.join('\r\n') + '\r\n' +
+      'END:VCALENDAR\r\n';
+  }
+
+  function downloadIcs(content, filename) {
+    var blob = new Blob([content], { type: 'text/calendar;charset=utf-8' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function() {
+      URL.revokeObjectURL(url);
+    }, 1000);
+  }
+
+  function initExportFavorites() {
+    var btn = document.querySelector('.export-favorites');
+    if (!btn) {
+      return;
+    }
+    btn.addEventListener('click', function() {
+      var ics = buildFavoritesIcs();
+      if (ics) {
+        downloadIcs(ics, 'favorites.ics');
+      } else {
+        window.alert('No favorites yet. Click the ♡ on events to add them.');
       }
     });
   }
@@ -104,14 +175,16 @@
     });
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function() {
-      initFavorites();
-      initCopyLinks();
-    });
-  } else {
+  function initAll() {
     initFavorites();
     initCopyLinks();
+    initExportFavorites();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAll);
+  } else {
+    initAll();
   }
 
   window.__getFavorites = getFavorites;

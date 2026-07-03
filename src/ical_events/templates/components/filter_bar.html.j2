@@ -1,9 +1,29 @@
 <div class="filter-bar" role="toolbar" aria-label="Event filters">
   <span class="event-count" aria-live="polite">{{ events | length }} event{{ 's' if events | length != 1 }}</span>
+  <input type="search"
+         class="search-input"
+         placeholder="Search events&hellip;"
+         aria-label="Search events by title, description, or location">
   <button type="button"
           class="favorites-toggle"
           aria-pressed="false"
           aria-label="Show favorites only">
     &#9829; Favorites Only
   </button>
+  <button type="button"
+          class="export-favorites"
+          aria-label="Download favorited events as an iCal file">
+    &darr; Export Favorites (.ics)
+  </button>
 </div>
+{%- if all_categories %}
+<div class="category-bar" role="toolbar" aria-label="Filter by category">
+  <span class="category-label">Categories:</span>
+  {%- for cat in all_categories %}
+  <button type="button"
+          class="category-chip"
+          data-category="{{ cat | lower }}"
+          aria-pressed="false">{{ cat }}</button>
+  {%- endfor %}
+</div>
+{%- endif %}
