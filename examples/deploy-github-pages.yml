@@ -41,7 +41,7 @@ jobs:
         run: uv python install 3.14
 
       - name: Generate the site
-        run: uvx --from ics-to-static-site-themes ical-events config.yaml -o site/index.html
+        run: uvx --from ics-to-static-site-themes==0.1.0 ical-events config.yaml -o site/index.html
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
